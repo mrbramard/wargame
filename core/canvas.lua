@@ -1,3 +1,0 @@
-local canvas = {}
-
-return canvas

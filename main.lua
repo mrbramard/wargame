@@ -1,12 +1,12 @@
-current_scene = require("scene.title")
+current_scene = require "scene.title"
 
 globals = {
     game_title = "wargame"
 }
 
 canvasConf = {
-    height = 480,
-    width = 480 * 16 / 9,
+    height = 10 * 16 * 3,
+    width = 15 * 16 * 3,
     scale = 1,
     offset_x = 0,
     offset_y = 0
@@ -18,8 +18,8 @@ function love.load()
     font = love.graphics.newImageFont("assets/imagefont.png", " abcdefghijklmnopqrstuvwxyz" ..
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" .. "123456789.,!?-+/():;%&`'*#=[]\"")
     love.graphics.setFont(font)
-    local w, h = love.graphics.getDimensions()
-    resizeCanvas(w, h)
+    resizeCanvas()
+    -- love.mouse.setGrabbed(true)
 end
 
 function love.keypressed(key, isrepeat)
@@ -28,6 +28,10 @@ function love.keypressed(key, isrepeat)
     end
 
     current_scene:keypressed(key, isrepeat)
+end
+
+function love.mousepressed(x, y, button, istouch)
+    current_scene:mousepressed(x, y, button, istouch)
 end
 
 function love.update(dt)
@@ -39,6 +43,8 @@ function love.draw()
     love.graphics.clear()
     love.graphics.push()
     current_scene:draw()
+    love.graphics.print('FPS : ' .. love.timer.getFPS(), 0, 0)
+    love.graphics.print('Mouse : ' .. love.mouse.getX() .. ' ' .. love.mouse.getY(), 0, 16)
     love.graphics.pop()
     love.graphics.setCanvas()
 
@@ -49,9 +55,17 @@ function love.resize(w, h)
     resizeCanvas(w, h)
 end
 
-function resizeCanvas(w, h)
-    canvasConf.scale = math.min(w / canvasConf.width, h / canvasConf.height)
-    local draw_w, draw_h = canvasConf.width * canvasConf.scale, canvasConf.height * canvasConf.scale
-    canvasConf.offset_x = (w - draw_w) / 2
-    canvasConf.offset_y = (h - draw_h) / 2
+function resizeCanvas()
+    local windowWidth, windowHeight = love.graphics.getDimensions()
+    canvasConf.scale = math.min(windowWidth / canvasConf.width, windowHeight / canvasConf.height)
+    canvasConf.offset_x = (windowWidth - canvasConf.width * canvasConf.scale) / 2
+    canvasConf.offset_y = (windowHeight - canvasConf.height * canvasConf.scale) / 2
+end
+
+function screenToCanvas(x, y)
+    local screenWidth, screenHeight = love.graphics.getDimensions()
+    local canvasx = (x - canvasConf.offset_x) / ((screenWidth - canvasConf.offset_x * 2) / canvasConf.width)
+    local canvasy = (y - canvasConf.offset_y) / ((screenHeight - canvasConf.offset_y * 2) / canvasConf.height)
+    return canvasx >= 0 and canvasx <= canvasConf.width and canvasx or -1,
+        canvasy >= 0 and canvasy <= canvasConf.height and canvasy or -1
 end

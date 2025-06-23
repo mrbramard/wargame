@@ -8,8 +8,11 @@ function title:keypressed(key, isrepeat)
     end
 
     if key == "space" then
-        current_scene = require("scene.game")
+        current_scene = require "scene.game"
     end
+end
+
+function title:mousepressed(x, y, button, istouch)
 end
 
 function title:update(dt)

@@ -1,10 +1,10 @@
 function love.conf(t)
     t.window.title = "my game"
-    t.window.height = 720
-    t.window.width = t.window.height * 16 / 9
+    t.window.height = 10 * 16 * 3 * 2
+    t.window.width = 15 * 16 * 3 * 2
     t.window.resizable = true
-    t.window.fullscreen = true
+    t.window.fullscreen = false
 
     t.version = "11.5"
-    t.console = false
+    t.console = true
 end
