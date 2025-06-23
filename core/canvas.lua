@@ -1,0 +1,3 @@
+local canvas = {}
+
+return canvas
