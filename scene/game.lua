@@ -22,10 +22,9 @@ function game:mousepressed(x, y, button, istouch)
     canvasx, canvasy = screenToCanvas(x, y)
     mappos = map:canvasToMap(test_map, canvasx, canvasy)
 
-    for i, s in ipairs(test_map.sprites) do
+    for _, s in ipairs(test_map.sprites) do
         if s[2] == mappos then
-
-            sprite.sprites[i].animations.idle.duration = 3
+            sprite.sprites[s[1]].animations.idle.duration = 3
         end
     end
 end
