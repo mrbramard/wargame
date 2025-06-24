@@ -4,11 +4,11 @@ local map = {}
 -- @param tileSize: size of each tile in pixels
 -- @param tilesAtlasPos: positions of each tile in the atlas image
 -- @param data: array of tile indices for the map
--- @param mapWidth: width of the map in tiles
+-- @param width: width of the map in tiles
 -- @param zoom: zoom factor for the map
 -- @return: a map object with the atlas image, tile size, tiles, data, map width, zoom factor, and a sprite batch for rendering
-function map:createMap(atlasPath, tileSize, tilesAtlasPos, data, mapWidth, zoom)
-    if not atlasPath or not tileSize or not tilesAtlasPos or not data or not mapWidth or not zoom then
+function map:createMap(atlasPath, tileSize, tilesAtlasPos, data, tileInfos, width, zoom)
+    if not atlasPath or not tileSize or not tilesAtlasPos or not data or not width or not zoom then
         return error("Invalid parameters for createMap")
     end
 
@@ -25,8 +25,9 @@ function map:createMap(atlasPath, tileSize, tilesAtlasPos, data, mapWidth, zoom)
         tileSize = tileSize,
         tiles = tiles,
         data = data or {},
+        tileInfos = tileInfos or {},
         sprites = sprites or {},
-        mapWidth = mapWidth,
+        width = width,
         zoom = zoom,
         spriteBatch = spriteBatch,
         ox = 0,
@@ -42,8 +43,8 @@ function map:draw(map, ix, iy)
     end
     map.ox, map.oy = ix or 0, iy or 0
     for i, cell in ipairs(map.data) do
-        local x = ((i - 1) % map.mapWidth) * map.tileSize * map.zoom + map.ox
-        local y = math.floor((i - 1) / map.mapWidth) * map.tileSize * map.zoom + map.oy
+        local x = ((i - 1) % map.width) * map.tileSize * map.zoom + map.ox
+        local y = math.floor((i - 1) / map.width) * map.tileSize * map.zoom + map.oy
         map.spriteBatch:add(map.tiles[cell], x, y, 0, map.zoom, map.zoom)
     end
 
@@ -53,7 +54,7 @@ function map:draw(map, ix, iy)
 end
 
 function map:getDimensions(map)
-    return map.mapWidth * map.tileSize * map.zoom, #map.data / map.mapWidth * map.tileSize * map.zoom
+    return map.width * map.tileSize * map.zoom, #map.data / map.width * map.tileSize * map.zoom
 end
 
 function map:mapToCanvas(map, x, y)
@@ -66,9 +67,9 @@ function map:mapToCanvas(map, x, y)
 end
 
 function map:canvasToMap(map, x, y)
-    local mx = math.ceil(x * map.map.mapWidth / canvasConf.width)
-    local my = math.ceil(y * (#map.map.data / map.map.mapWidth) / canvasConf.height)
-    return (my - 1) * map.map.mapWidth + mx
+    local mx = math.ceil(x * map.width / canvasConf.width)
+    local my = math.ceil(y * (#map.data / map.width) / canvasConf.height)
+    return (my - 1) * map.width + mx
 end
 
 return map

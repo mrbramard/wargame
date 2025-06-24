@@ -2,6 +2,13 @@ local title = {
     press_key = "Press space to begin"
 }
 
+function title:load()
+    if music then music:stop() end
+    music = love.audio.newSource("assets/music/battle-fanfare.mp3", "stream")
+    music:setLooping(true)
+    music:play()
+end
+
 function title:keypressed(key, isrepeat)
     if key == "escape" then
         love.event.quit()
@@ -9,10 +16,14 @@ function title:keypressed(key, isrepeat)
 
     if key == "space" then
         current_scene = require "scene.game"
+        current_scene:load()
     end
 end
 
 function title:mousepressed(x, y, button, istouch)
+end
+
+function title:mousemoved(x, y, dx, dy, istouch)
 end
 
 function title:update(dt)

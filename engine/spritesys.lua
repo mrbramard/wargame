@@ -1,17 +1,14 @@
-local sprite = {}
+local spritesys = {}
 
-local spritesheet = love.graphics.newImage("assets/spritesheet.png")
-local spriteWidth, spriteHeight = 16, 16
-local spriteBatch = love.graphics.newSpriteBatch(spritesheet)
-
-function sprite:new(positions, animations)
+function spritesys:new(spritesheet, positions, animations, infos)
     local newSprite = {
         quads = {},
-        animations = nil
+        animations = nil,
+        infos = infos or {}
     }
 
     for i, pos in ipairs(positions) do
-        newSprite.quads[i] = love.graphics.newQuad(pos[1], pos[2], spriteWidth, spriteHeight, spritesheet:getWidth(),
+        newSprite.quads[i] = love.graphics.newQuad(pos[1], pos[2], 16, 16, spritesheet:getWidth(),
             spritesheet:getHeight())
     end
 
@@ -29,8 +26,11 @@ function sprite:new(positions, animations)
         end
     end
 
-    print "sprite created"
     return newSprite
+end
+
+function spritesys:initializeSpriteBatch(spritebatch)
+    spritebatch:clear()
 end
 
 -- Adds a sprite to the sprite batch
@@ -40,16 +40,12 @@ end
 -- @param scaleX: The horizontal scale factor (default is 1)
 -- @param scaleY: The vertical scale factor (default is 1)
 -- @return: None
-function sprite:initializeSpriteBatch()
-    spriteBatch:clear()
+function spritesys:addSpriteToSpriteBatch(spritebatch, quad, x, y, scaleX, scaleY, flip)
+    spritebatch:add(quad, x, y, 0, flip and -scaleX or scaleX or 1, scaleY or 1, 0, 3)
 end
 
-function sprite:addSpriteToSpriteBatch(quad, x, y, scaleX, scaleY, flip)
-    spriteBatch:add(quad, x, y, 0, flip and -scaleX or scaleX or 1, scaleY or 1, 0, 3)
+function spritesys:drawSpriteBatch(spritebatch)
+    love.graphics.draw(spritebatch)
 end
 
-function sprite:drawSpriteBatch()
-    love.graphics.draw(spriteBatch)
-end
-
-return sprite
+return spritesys

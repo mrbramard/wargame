@@ -12,6 +12,8 @@ canvasConf = {
     offset_y = 0
 }
 
+music = nil
+
 function love.load()
     math.randomseed(os.time())
     love.graphics.setDefaultFilter("nearest")
@@ -21,6 +23,8 @@ function love.load()
     love.graphics.setFont(font)
     resizeCanvas()
     -- love.mouse.setGrabbed(true)
+
+    current_scene:load()
 end
 
 function love.keypressed(key, isrepeat)
@@ -33,6 +37,10 @@ end
 
 function love.mousepressed(x, y, button, istouch)
     current_scene:mousepressed(x, y, button, istouch)
+end
+
+function love.mousemoved(x, y, dx, dy, istouch)
+    current_scene:mousemoved(x, y, dx, dy, istouch)
 end
 
 function love.update(dt)
