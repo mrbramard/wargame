@@ -141,10 +141,37 @@ function game:update(dt)
             anim.current_frame = 1
         end
     end
+
+    if selectedSoldier then
+        local selectedSoldierPos = selectedSoldier[2]
+        tilesInRange = {}
+
+        for i = 1, #test_map.data do
+            local x1 = (selectedSoldierPos - 1) % test_map.width + 1
+            local y1 = math.ceil(selectedSoldierPos / test_map.width)
+            local x2 = (i - 1) % test_map.width + 1
+            local y2 = math.ceil(i / test_map.width)
+            local dist = math.abs(x1 - x2) + math.abs(y1 - y2)
+            if dist <= 3 then
+            -- if dist <= spriteTypes[selectedSoldier[1]].infos.move then
+                table.insert(tilesInRange, i)
+            end
+        end
+    end
+
 end
 
 function game:draw()
     mapsys:draw(test_map, mapX, mapY)
+
+    if tilesInRange then
+        love.graphics.setColor(0,0,0,0.5)
+        for i, t in ipairs(tilesInRange) do
+            local pos = mapsys:mapToCanvas(test_map, (t % test_map.width), math.ceil(t / test_map.width))
+            love.graphics.rectangle("fill", pos.x, pos.y, test_map.tileSize * test_map.zoom, test_map.tileSize * test_map.zoom)
+        end
+        love.graphics.setColor(1,1,1)
+    end
 
     spritesys:initializeSpriteBatch(spritebatch)
     for _, s in ipairs(test_map.sprites.red) do
