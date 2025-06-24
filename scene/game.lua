@@ -73,8 +73,14 @@ function game:mousepressed(x, y, button, istouch)
 
     for _, s in ipairs(test_map.sprites.red) do
         if s[2] == mappos then
-            if selectedSoldier == s then selectedSoldier = nil
-            else selectedSoldier = s
+            if selectedSoldier == s then 
+                selectedSoldier = nil
+                tilesInRange = {}
+            elseif selectedSoldier and selectedSoldier ~= s then 
+                selectedSoldier.animation.state = "idle"
+                selectedSoldier = s
+            else
+                selectedSoldier = s
             end
             s.animation.state = s.animation.state == "idle" and "run" or "idle"
         end
