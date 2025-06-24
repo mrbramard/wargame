@@ -40,7 +40,7 @@ function scene_sys.mousepressed(...)
 end
 
 function scene_sys.mousemoved(...)
-    if scene_sys.current and scene_sys.current.keymousemovedpressed then
+    if scene_sys.current and scene_sys.current.mousemoved then
         scene_sys.current.mousemoved(...)
     end
 end

@@ -1,6 +1,4 @@
-local title = {
-    press_key = "Press space to begin"
-}
+local title = {}
 
 function title:load()
     if music then

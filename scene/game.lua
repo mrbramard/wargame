@@ -66,9 +66,11 @@ end
 function game:mousepressed(x, y, button, istouch)
     local canvasx, canvasy = screenToCanvas(x, y)
     local mappos = map_sys:canvasToMap(test_map, canvasx, canvasy)
+    local clickedOnSelectedSoldier = false
 
     for _, s in ipairs(test_map.sprites.red) do
         if s[2] == mappos then
+            clickedOnSelectedSoldier = true
             if selectedSoldier == s then
                 selectedSoldier = nil
                 tilesInRange = {}
@@ -79,6 +81,18 @@ function game:mousepressed(x, y, button, istouch)
                 selectedSoldier = s
             end
             s.animation.state = s.animation.state == "idle" and "run" or "idle"
+        end
+    end
+
+    if tilesInRange then
+        for _, t in ipairs(tilesInRange) do
+            if t == mappos and selectedSoldier then
+                selectedSoldier[2] = mappos
+                selectedSoldier.animation.state = "idle"
+                selectedSoldier = nil
+                tilesInRange = {}
+                break
+            end
         end
     end
 end
