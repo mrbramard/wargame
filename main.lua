@@ -13,6 +13,7 @@ canvasConf = {
 }
 
 function love.load()
+    math.randomseed(os.time())
     love.graphics.setDefaultFilter("nearest")
     canvas = love.graphics.newCanvas(canvasConf.width, canvasConf.height)
     font = love.graphics.newImageFont("assets/imagefont.png", " abcdefghijklmnopqrstuvwxyz" ..
@@ -44,7 +45,6 @@ function love.draw()
     love.graphics.push()
     current_scene:draw()
     love.graphics.print('FPS : ' .. love.timer.getFPS(), 0, 0)
-    love.graphics.print('Mouse : ' .. love.mouse.getX() .. ' ' .. love.mouse.getY(), 0, 16)
     love.graphics.pop()
     love.graphics.setCanvas()
 

@@ -1,25 +1,37 @@
 local sprite = {}
 
 local spritesheet = love.graphics.newImage("assets/spritesheet.png")
-local aw, ah = spritesheet:getWidth(), spritesheet:getHeight()
 local spriteWidth, spriteHeight = 16, 16
 local spriteBatch = love.graphics.newSpriteBatch(spritesheet)
 
-sprite.sprites = {{
-    quads = {love.graphics.newQuad(0, 0, spriteWidth, spriteHeight, aw, ah),
-             love.graphics.newQuad(16, 0, spriteWidth, spriteHeight, aw, ah),
-             love.graphics.newQuad(32, 0, spriteWidth, spriteHeight, aw, ah)},
-    animations = {
-        current_frame = 1,
-        timer = 0,
-        idle = {
-            frames = {1, 2, 3, 2},
-            duration = 0.2
-        }
+function sprite:new(positions, animations)
+    local newSprite = {
+        quads = {},
+        animations = nil
     }
-}, {
-    quads = {love.graphics.newQuad(0, 16, spriteWidth, spriteHeight, aw, ah)}
-}}
+
+    for i, pos in ipairs(positions) do
+        newSprite.quads[i] = love.graphics.newQuad(pos[1], pos[2], spriteWidth, spriteHeight, spritesheet:getWidth(),
+            spritesheet:getHeight())
+    end
+
+    if animations then
+        newSprite.animations = {
+            current_frame = 1,
+            timer = 0
+        }
+
+        for i, anim in ipairs(animations) do
+            newSprite.animations[anim.id] = {
+                frames = anim.frames,
+                duration = anim.duration or 1
+            }
+        end
+    end
+
+    print "sprite created"
+    return newSprite
+end
 
 -- Adds a sprite to the sprite batch
 -- @param quad: The quad representing the sprite
