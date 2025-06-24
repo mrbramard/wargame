@@ -13,7 +13,7 @@ local redSoldierSprite = sprite:new({{0, 0}, {16, 0}, {32, 0}, {48, 0}, {48, 16}
 }, {
     id = "run",
     frames = {4, 5, 4, 6},
-    duration = 0.1
+    duration = 0.2
 
 }})
 local blueSoldierSprite = sprite:new({{0, 16}})
@@ -52,7 +52,7 @@ function game:update(dt)
 
         local anim = s.animation
 
-        if anim.timer + dt > spriteType.animations.idle.duration then
+        if anim.timer + dt > spriteType.animations[s.animation.state].duration then
             anim.timer = 0
             anim.current_frame = anim.current_frame + 1
         else
