@@ -3,7 +3,9 @@ local title = {
 }
 
 function title:load()
-    if music then music:stop() end
+    if music then
+        music:stop()
+    end
     music = love.audio.newSource("assets/music/battle-fanfare.mp3", "stream")
     music:setLooping(true)
     music:play()
@@ -15,18 +17,8 @@ function title:keypressed(key, isrepeat)
     end
 
     if key == "space" then
-        current_scene = require "scene.game"
-        current_scene:load()
+        scene_sys.switch("game")
     end
-end
-
-function title:mousepressed(x, y, button, istouch)
-end
-
-function title:mousemoved(x, y, dx, dy, istouch)
-end
-
-function title:update(dt)
 end
 
 function title:draw()

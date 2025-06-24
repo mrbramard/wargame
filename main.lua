@@ -1,4 +1,4 @@
-current_scene = require "scene.title"
+scene_sys = require "engine.scene_sys"
 
 globals = {
     game_title = "wargame"
@@ -24,7 +24,9 @@ function love.load()
     resizeCanvas()
     -- love.mouse.setGrabbed(true)
 
-    current_scene:load()
+    scene_sys.register("title", require "scene.title")
+    scene_sys.register("game", require "scene.game")
+    scene_sys.switch("title")
 end
 
 function love.keypressed(key, isrepeat)
@@ -32,26 +34,26 @@ function love.keypressed(key, isrepeat)
         love.window.setFullscreen(not love.window.getFullscreen())
     end
 
-    current_scene:keypressed(key, isrepeat)
+    scene_sys.keypressed(key, isrepeat)
 end
 
 function love.mousepressed(x, y, button, istouch)
-    current_scene:mousepressed(x, y, button, istouch)
+    scene_sys:mousepressed(x, y, button, istouch)
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
-    current_scene:mousemoved(x, y, dx, dy, istouch)
+    scene_sys:mousemoved(x, y, dx, dy, istouch)
 end
 
 function love.update(dt)
-    current_scene:update(dt)
+    scene_sys:update(dt)
 end
 
 function love.draw()
     love.graphics.setCanvas(canvas)
     love.graphics.clear()
     love.graphics.push()
-    current_scene:draw()
+    scene_sys:draw()
     love.graphics.print('FPS : ' .. love.timer.getFPS(), 0, 0)
     love.graphics.pop()
     love.graphics.setCanvas()
